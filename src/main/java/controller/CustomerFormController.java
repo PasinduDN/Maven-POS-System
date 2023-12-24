@@ -66,7 +66,8 @@ public class CustomerFormController {
 
     @FXML
     void reloadButtonOnAction(ActionEvent event) {
-
+        loadCustomerTable();
+        tblCustomer.refresh();
     }
 
     @FXML
@@ -85,6 +86,7 @@ public class CustomerFormController {
             int result = stm.executeUpdate(sql);
             if (result>0){
                 new Alert(Alert.AlertType.INFORMATION,"Customer Saved!").show();
+                loadCustomerTable();
             }
             connection.close();
         } catch (ClassNotFoundException | SQLException e) {
@@ -121,6 +123,10 @@ public class CustomerFormController {
                         result.getDouble(4),
                         btn
                 );
+
+                btn.setOnAction(actionEvent -> {
+                    deleteCustomer(c.getId());
+                });
                 tmlist.add(c);
             }
             connection.close();
@@ -128,6 +134,28 @@ public class CustomerFormController {
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private void deleteCustomer(String id) {
+
+        String sql = "DELETE FROM customer WHERE id='"+id+"'";
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/thogakade","root","12345");
+            Statement stm = connection.createStatement();
+            int result = stm.executeUpdate(sql);
+            if (result>0){
+                new Alert(Alert.AlertType.INFORMATION,"Customer Deleted!").show();
+                loadCustomerTable();
+            }else {
+                new Alert(Alert.AlertType.ERROR,"Something went wrong;");
+            }
+            connection.close();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @FXML
