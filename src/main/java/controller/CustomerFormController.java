@@ -68,6 +68,16 @@ public class CustomerFormController {
     void reloadButtonOnAction(ActionEvent event) {
         loadCustomerTable();
         tblCustomer.refresh();
+        clearfields();
+    }
+
+    private void clearfields() {
+        tblCustomer.refresh();
+        txtID.clear();
+        txtName.clear();
+        txtAddress.clear();
+        txtSalary.clear();
+        txtID.setEditable(true);
     }
 
     @FXML
@@ -87,8 +97,11 @@ public class CustomerFormController {
             if (result>0){
                 new Alert(Alert.AlertType.INFORMATION,"Customer Saved!").show();
                 loadCustomerTable();
+                clearfields();
             }
             connection.close();
+        }catch (SQLIntegrityConstraintViolationException ex){
+            new Alert(Alert.AlertType.ERROR,"Duplicate Entity").show();
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
@@ -109,10 +122,13 @@ public class CustomerFormController {
     }
 
     private void setdata(CustomerTm newValue) {
-        txtID.setText(newValue.getId());
-        txtName.setText(newValue.getName());
-        txtAddress.setText(newValue.getAddress());
-        txtSalary.setText(String.valueOf(newValue.getSalary()));
+        if (newValue != null){
+            txtID.setEditable(false);
+            txtID.setText(newValue.getId());
+            txtName.setText(newValue.getName());
+            txtAddress.setText(newValue.getAddress());
+            txtSalary.setText(String.valueOf(newValue.getSalary()));
+        }
     }
 
     private void loadCustomerTable() {
@@ -172,7 +188,27 @@ public class CustomerFormController {
 
     @FXML
     void updateButtonOnAction(ActionEvent event) {
+        Customer c = new Customer(txtID.getText(),
+                txtName.getText(),
+                txtAddress.getText(),
+                Double.parseDouble(txtSalary.getText()));
 
+        String sql = "UPDATE customer SET name='"+c.getName()+"', address='"+c.getAddress()+"', salary="+c.getSalary()+" WHERE id='"+c.getId()+"'";
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/thogakade","root","12345");
+            Statement stm = connection.createStatement();
+            int result = stm.executeUpdate(sql);
+            if (result>0){
+                new Alert(Alert.AlertType.INFORMATION,"Customer "+c.getId()+" Updated!").show();
+                loadCustomerTable();
+                clearfields();
+            }
+            connection.close();
+        }catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }
