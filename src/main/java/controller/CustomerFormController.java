@@ -1,15 +1,16 @@
 package controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import model.Customer;
+import model.tm.CustomerTm;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class CustomerFormController {
 
@@ -44,7 +45,7 @@ public class CustomerFormController {
     private AnchorPane customerWindow;
 
     @FXML
-    private TableView<?> tblCustomer;
+    private TableView<CustomerTm> tblCustomer;
 
     @FXML
     private TextField txtAddress;
@@ -85,12 +86,49 @@ public class CustomerFormController {
             if (result>0){
                 new Alert(Alert.AlertType.INFORMATION,"Customer Saved!").show();
             }
+            connection.close();
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
-//            throw new RuntimeException(e);
         }
-    };
+    }
 
+    public void initialize(){
+        colID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        colAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+        colSalry.setCellValueFactory(new PropertyValueFactory<>("salary"));
+        colOption.setCellValueFactory(new PropertyValueFactory<>("btn"));
+        loadCustomerTable();
+    }
+
+    private void loadCustomerTable() {
+
+        ObservableList <CustomerTm> tmlist = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM customer";
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/thogakade","root","12345");
+            Statement stm = connection.createStatement();
+            ResultSet result = stm.executeQuery(sql);
+
+            while (result.next()){
+                Button btn = new Button("Delete");
+                CustomerTm c = new CustomerTm(
+                        result.getString(1),
+                        result.getString(2),
+                        result.getString(3),
+                        result.getDouble(4),
+                        btn
+                );
+                tmlist.add(c);
+            }
+            connection.close();
+            tblCustomer.setItems(tmlist);
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     void updateButtonOnAction(ActionEvent event) {
