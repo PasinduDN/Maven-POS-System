@@ -101,6 +101,18 @@ public class CustomerFormController {
         colSalry.setCellValueFactory(new PropertyValueFactory<>("salary"));
         colOption.setCellValueFactory(new PropertyValueFactory<>("btn"));
         loadCustomerTable();
+
+        tblCustomer.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
+            setdata(newValue);
+        });
+
+    }
+
+    private void setdata(CustomerTm newValue) {
+        txtID.setText(newValue.getId());
+        txtName.setText(newValue.getName());
+        txtAddress.setText(newValue.getAddress());
+        txtSalary.setText(String.valueOf(newValue.getSalary()));
     }
 
     private void loadCustomerTable() {
