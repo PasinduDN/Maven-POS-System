@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CustomerFormController">
+   <children>
+      <AnchorPane fx:id="customerWindow" prefHeight="453.0" prefWidth="630.0" style="-fx-background-color: #C0C0C0;">
+         <children>
+            <TextField fx:id="txtID" layoutX="26.0" layoutY="86.0" prefHeight="25.0" prefWidth="102.0" />
+            <TextField fx:id="txtName" layoutX="142.0" layoutY="86.0" prefHeight="25.0" prefWidth="185.0" />
+            <TextField fx:id="txtAddress" layoutX="338.0" layoutY="86.0" prefHeight="25.0" prefWidth="158.0" />
+            <TextField fx:id="txtSalary" layoutX="512.0" layoutY="86.0" prefHeight="25.0" prefWidth="102.0" />
+            <Label layoutX="26.0" layoutY="60.0" text="ID" />
+            <Label layoutX="142.0" layoutY="60.0" text="Name" />
+            <Label layoutX="338.0" layoutY="60.0" text="Address" />
+            <Label layoutX="512.0" layoutY="60.0" text="Salary" />
+            <Button fx:id="btnSave" layoutX="544.0" layoutY="121.0" mnemonicParsing="false" onAction="#saveButtonOnAction" prefHeight="25.0" prefWidth="70.0" text="Save" />
+            <TableView fx:id="tblCustomer" layoutX="25.0" layoutY="152.0" prefHeight="255.0" prefWidth="589.0">
+               <columns>
+                  <TableColumn fx:id="colID" prefWidth="88.0" text="ID" />
+                  <TableColumn fx:id="colName" prefWidth="138.0" text="Name" />
+                  <TableColumn fx:id="colAddress" prefWidth="132.0" text="Address" />
+                  <TableColumn fx:id="colSalry" prefWidth="120.0" text="Salary" />
+                  <TableColumn fx:id="colOption" prefWidth="110.0" text="Option" />
+               </columns>
+            </TableView>
+            <Button fx:id="btnRelod" layoutX="563.0" layoutY="413.0" mnemonicParsing="false" onAction="#reloadButtonOnAction" prefHeight="25.0" prefWidth="53.0" text="Reload" />
+            <Button fx:id="btnUpdate" layoutX="457.0" layoutY="121.0" mnemonicParsing="false" onAction="#updateButtonOnAction" prefHeight="25.0" prefWidth="79.0" text="Update" />
+            <Button fx:id="btnBack" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#backBtnOnAction" prefHeight="34.0" prefWidth="70.0" text="Back" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
