@@ -151,6 +151,7 @@ public class CustomerFormController {
 
             while (result.next()){
                 Button btn = new Button("Delete");
+                btn.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
                 CustomerTm c = new CustomerTm(
                         result.getString(1),
                         result.getString(2),
