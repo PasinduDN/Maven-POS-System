@@ -11,7 +11,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import model.Customer;
-import model.tm.CustomerTm;
+import dto.tm.CustomerTm;
 
 import java.io.IOException;
 import java.sql.*;

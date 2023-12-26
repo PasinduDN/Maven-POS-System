@@ -9,6 +9,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import dto.tm.ItemTm;
 
 import java.io.IOException;
 
@@ -36,7 +37,7 @@ public class ItemFormController {
     private TableColumn<?, ?> colQty;
 
     @FXML
-    private TableView<?> tblItem;
+    private TableView<ItemTm> tblItem;
 
     @FXML
     private TextField txtCode;
@@ -52,6 +53,7 @@ public class ItemFormController {
 
     @FXML
     private TextField txtSearch;
+
 
     @FXML
     void backButtonOnAction(ActionEvent event) {
@@ -70,5 +72,9 @@ public class ItemFormController {
     }
 
     public void updateBtnOnAction(ActionEvent actionEvent) {
+    }
+
+    public void initialize(){
+
     }
 }
