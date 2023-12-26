@@ -1,5 +1,6 @@
 package controller;
 
+import db.DBConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -101,16 +102,13 @@ public class CustomerFormController {
         String sql = "INSERT INTO customer VALUES ('"+c.getId()+"','"+c.getName()+"','"+c.getAddress()+"',"+c.getSalary()+")";
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/thogakade","root","12345");
-            Statement stm = connection.createStatement();
+            Statement stm = DBConnection.getInstance().getConnection().createStatement();
             int result = stm.executeUpdate(sql);
             if (result>0){
                 new Alert(Alert.AlertType.INFORMATION,"Customer Saved!").show();
                 loadCustomerTable();
                 clearfields();
             }
-            connection.close();
         }catch (SQLIntegrityConstraintViolationException ex){
             new Alert(Alert.AlertType.ERROR,"Duplicate Entity").show();
         } catch (ClassNotFoundException | SQLException e) {
@@ -148,9 +146,7 @@ public class CustomerFormController {
         String sql = "SELECT * FROM customer";
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/thogakade","root","12345");
-            Statement stm = connection.createStatement();
+            Statement stm = DBConnection.getInstance().getConnection().createStatement();
             ResultSet result = stm.executeQuery(sql);
 
             while (result.next()){
@@ -168,7 +164,6 @@ public class CustomerFormController {
                 });
                 tmlist.add(c);
             }
-            connection.close();
             tblCustomer.setItems(tmlist);
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
@@ -180,9 +175,7 @@ public class CustomerFormController {
         String sql = "DELETE FROM customer WHERE id='"+id+"'";
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/thogakade","root","12345");
-            Statement stm = connection.createStatement();
+            Statement stm = DBConnection.getInstance().getConnection().createStatement();
             int result = stm.executeUpdate(sql);
             if (result>0){
                 new Alert(Alert.AlertType.INFORMATION,"Customer Deleted!").show();
@@ -190,7 +183,6 @@ public class CustomerFormController {
             }else {
                 new Alert(Alert.AlertType.ERROR,"Something went wrong;");
             }
-            connection.close();
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
@@ -207,16 +199,13 @@ public class CustomerFormController {
         String sql = "UPDATE customer SET name='"+c.getName()+"', address='"+c.getAddress()+"', salary="+c.getSalary()+" WHERE id='"+c.getId()+"'";
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/thogakade","root","12345");
-            Statement stm = connection.createStatement();
+            Statement stm = DBConnection.getInstance().getConnection().createStatement();
             int result = stm.executeUpdate(sql);
             if (result>0){
                 new Alert(Alert.AlertType.INFORMATION,"Customer "+c.getId()+" Updated!").show();
                 loadCustomerTable();
                 clearfields();
             }
-            connection.close();
         }catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
