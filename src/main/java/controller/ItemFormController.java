@@ -1,21 +1,25 @@
 package controller;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.RecursiveTreeItem;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import db.DBConnection;
 import dto.CustomerDto;
 import dto.ItemDto;
+import dto.tm.CustomerTm;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import dto.tm.ItemTm;
 
 import java.io.IOException;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class ItemFormController {
 
@@ -91,7 +95,7 @@ public class ItemFormController {
             int result = pstm.executeUpdate();
             if (result>0){
                 new Alert(Alert.AlertType.INFORMATION,"Item Saved!").show();
-//                loadCustomerTable();
+                loadItemTable();
 //                clearfields();
             }
         }catch (SQLIntegrityConstraintViolationException ex){
@@ -105,6 +109,77 @@ public class ItemFormController {
     }
 
     public void initialize(){
+        colCode.setCellValueFactory(new PropertyValueFactory<>("code"));
+        colDes.setCellValueFactory(new PropertyValueFactory<>("desc"));
+        colPrice.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+        colQty.setCellValueFactory(new PropertyValueFactory<>("qty"));
+        colOption.setCellValueFactory(new PropertyValueFactory<>("btn"));
 
+        loadItemTable();
+
+        tblItem.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
+            setdata(newValue);
+        });
+
+    }
+
+    private void loadItemTable() {
+        ObservableList<ItemTm> tmlist = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM item";
+
+        try {
+            Statement stm = DBConnection.getInstance().getConnection().createStatement();
+            ResultSet result = stm.executeQuery(sql);
+
+            while (result.next()){
+                JFXButton btn = new JFXButton("Delete");
+                btn.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+
+                ItemTm c = new ItemTm(
+                        result.getString(1),
+                        result.getString(2),
+                        result.getDouble(3),
+                        result.getInt(4),
+                        btn
+                );
+
+                btn.setOnAction(actionEvent -> {
+                    DeleteItem(c.getCode());
+                });
+                tmlist.add(c);
+            }
+
+            tblItem.setItems(tmlist);
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void DeleteItem(String code) {
+        String sql = "DELETE FROM item WHERE code= ? ";
+
+        try {
+            PreparedStatement pstm = DBConnection.getInstance().getConnection().prepareStatement(sql);
+            pstm.setString(1,code);
+            int result = pstm.executeUpdate(sql);
+            if (result>0){
+                new Alert(Alert.AlertType.INFORMATION,"Item Deleted!").show();
+                loadItemTable();
+            }else {
+                new Alert(Alert.AlertType.ERROR,"Something went wrong;");
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setdata(ItemTm newValue) {
+        if (newValue != null){
+            txtCode.setEditable(false);
+            txtCode.setText(newValue.getCode());
+            txtDes.setText(newValue.getDesc());
+            txtPrice.setText(String.valueOf(newValue.getUnitPrice()));
+            txtQty.setText(String.valueOf(newValue.getQty()));
+        }
     }
 }
