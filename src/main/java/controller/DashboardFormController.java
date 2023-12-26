@@ -21,6 +21,7 @@ public class DashboardFormController {
     public Button btnCustomer;
     public AnchorPane pane;
     public Label lblTime;
+    public Button btnItem;
 
     public void customerBtnOnAction(ActionEvent actionEvent) {
         Stage stage = (Stage) pane.getScene().getWindow();
@@ -46,4 +47,13 @@ public class DashboardFormController {
         timeline.play();
     }
 
+    public void itemBtnOnClick(ActionEvent actionEvent) {
+        Stage stage = (Stage) pane.getScene().getWindow();
+        try {
+            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("../view/ItemForm.fxml"))));
+            stage.show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
