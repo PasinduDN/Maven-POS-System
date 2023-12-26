@@ -11,7 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import model.Customer;
+import dto.CustomerDto;
 import dto.tm.CustomerTm;
 
 import java.io.IOException;
@@ -94,7 +94,7 @@ public class CustomerFormController {
 
     @FXML
     void saveButtonOnAction(ActionEvent event) {
-        Customer c = new Customer(txtID.getText(),
+        CustomerDto c = new CustomerDto(txtID.getText(),
                 txtName.getText(),
                 txtAddress.getText(),
                 Double.parseDouble(txtSalary.getText()));
@@ -191,7 +191,7 @@ public class CustomerFormController {
 
     @FXML
     void updateButtonOnAction(ActionEvent event) {
-        Customer c = new Customer(txtID.getText(),
+        CustomerDto c = new CustomerDto(txtID.getText(),
                 txtName.getText(),
                 txtAddress.getText(),
                 Double.parseDouble(txtSalary.getText()));
