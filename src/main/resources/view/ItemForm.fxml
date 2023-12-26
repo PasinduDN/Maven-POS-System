@@ -1,14 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controller.ItemFormController"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="419.0" prefWidth="611.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ItemFormController">
+   <children>
+      <Label layoutX="30.0" layoutY="50.0" text="Item Code">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="498.0" layoutY="50.0" text="QTY">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="148.0" layoutY="50.0" text="Description">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="365.0" layoutY="50.0" text="Unit Price">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="txtCode" layoutX="30.0" layoutY="76.0" prefHeight="25.0" prefWidth="100.0" />
+      <TextField fx:id="txtDes" layoutX="148.0" layoutY="76.0" prefHeight="25.0" prefWidth="192.0" />
+      <TextField fx:id="txtPrice" layoutX="365.0" layoutY="76.0" prefHeight="25.0" prefWidth="100.0" />
+      <Button fx:id="btnBack" layoutX="30.0" layoutY="14.0" mnemonicParsing="false" onAction="#backButtonOnAction" text="Back">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Button>
+      <TextField fx:id="txtQty" layoutX="498.0" layoutY="76.0" prefHeight="25.0" prefWidth="85.0" />
+      <TextField fx:id="txtSearch" layoutX="30.0" layoutY="117.0" prefHeight="25.0" prefWidth="153.0" />
+      <TableView fx:id="tblItem" layoutX="30.0" layoutY="157.0" prefHeight="213.0" prefWidth="552.0">
+        <columns>
+          <TableColumn fx:id="colCode" prefWidth="75.0" text="Item Code" />
+          <TableColumn fx:id="colDes" prefWidth="194.0" text="Description" />
+            <TableColumn fx:id="colPrice" prefWidth="106.0" text="Unit Price" />
+            <TableColumn fx:id="colQty" prefWidth="79.0" text="QTY" />
+            <TableColumn fx:id="colOption" prefWidth="97.0" text="Option" />
+        </columns>
+      </TableView>
+      <Button fx:id="btnUpdate" layoutX="468.0" layoutY="382.0" mnemonicParsing="false" onAction="#updateBtnOnAction" text="Update">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnSave" layoutX="541.0" layoutY="382.0" mnemonicParsing="false" onAction="#saveBtnOnAction" text="Save">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Button>
+   </children>
 </AnchorPane>
