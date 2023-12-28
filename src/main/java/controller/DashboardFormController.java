@@ -22,11 +22,14 @@ public class DashboardFormController {
     public AnchorPane pane;
     public Label lblTime;
     public Button btnItem;
+    public Button btnPlaceOrder;
 
     public void customerBtnOnAction(ActionEvent actionEvent) {
         Stage stage = (Stage) pane.getScene().getWindow();
         try {
             stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("../view/CustomerForm.fxml"))));
+            stage.setResizable(true);
+            stage.setTitle("Customer");
             stage.show();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -51,6 +54,20 @@ public class DashboardFormController {
         Stage stage = (Stage) pane.getScene().getWindow();
         try {
             stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("../view/ItemForm.fxml"))));
+            stage.setResizable(true);
+            stage.setTitle("Item");
+            stage.show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void placeOrderBtnOnClick(ActionEvent actionEvent) {
+        Stage stage = (Stage) pane.getScene().getWindow();
+        try {
+            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("../view/PlaceOrderForm.fxml"))));
+            stage.setResizable(true);
+            stage.setTitle("Place Order");
             stage.show();
         } catch (IOException e) {
             throw new RuntimeException(e);
