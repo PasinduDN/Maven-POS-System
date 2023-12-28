@@ -13,9 +13,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import dto.CustomerDto;
 import dto.tm.CustomerTm;
+import model.CustomerModel;
+import model.impl.CustomerModelImpl;
 
 import java.io.IOException;
 import java.sql.*;
+import java.util.List;
+
 
 public class CustomerFormController {
 
@@ -64,6 +68,7 @@ public class CustomerFormController {
     @FXML
     private TextField txtSalary;
 
+    private CustomerModel customerModel = new CustomerModelImpl();
     @FXML
     void backBtnOnAction(ActionEvent event) {
         Stage stage = (Stage) tblCustomer.getScene().getWindow();
@@ -143,20 +148,19 @@ public class CustomerFormController {
     private void loadCustomerTable() {
 
         ObservableList <CustomerTm> tmlist = FXCollections.observableArrayList();
-        String sql = "SELECT * FROM customer";
+//        String sql = "SELECT * FROM customer";
 
         try {
-            Statement stm = DBConnection.getInstance().getConnection().createStatement();
-            ResultSet result = stm.executeQuery(sql);
+            List<CustomerDto> dtoList = customerModel.allCustomers();
 
-            while (result.next()){
+            for (CustomerDto dto : dtoList){
                 Button btn = new Button("Delete");
                 btn.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
                 CustomerTm c = new CustomerTm(
-                        result.getString(1),
-                        result.getString(2),
-                        result.getString(3),
-                        result.getDouble(4),
+                        dto.getId(),
+                        dto.getName(),
+                        dto.getAddress(),
+                        dto.getSalary(),
                         btn
                 );
 
@@ -166,9 +170,12 @@ public class CustomerFormController {
                 tmlist.add(c);
             }
             tblCustomer.setItems(tmlist);
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
+
     }
 
     private void deleteCustomer(String id) {
