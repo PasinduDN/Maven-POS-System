@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CustomerModel {
     boolean saveCustomer (CustomerDto dto) throws SQLException, ClassNotFoundException;
-    boolean updateCutomer (CustomerDto dto);
+    boolean updateCutomer (CustomerDto dto) throws SQLException, ClassNotFoundException;
     boolean deleteCustomer (CustomerDto dto);
 
     List <CustomerDto> allCustomers () throws SQLException, ClassNotFoundException;

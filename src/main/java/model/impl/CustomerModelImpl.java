@@ -27,8 +27,17 @@ public class CustomerModelImpl implements CustomerModel {
 
 
     @Override
-    public boolean updateCutomer(CustomerDto dto) {
-        return false;
+    public boolean updateCutomer(CustomerDto dto) throws SQLException, ClassNotFoundException {
+
+        String sql = "UPDATE customer SET name=?, address=?, salary=? WHERE id=?";
+        PreparedStatement pstm = DBConnection.getInstance().getConnection().prepareStatement(sql);
+
+        pstm.setString(1, dto.getName());
+        pstm.setString(2, dto.getAddress());
+        pstm.setDouble(3, dto.getSalary());
+        pstm.setString(4, dto.getId());
+
+        return pstm.executeUpdate()>0;
     }
 
     @Override

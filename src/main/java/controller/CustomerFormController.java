@@ -196,18 +196,17 @@ public class CustomerFormController {
 
     @FXML
     void updateButtonOnAction(ActionEvent event) {
-        CustomerDto c = new CustomerDto(txtID.getText(),
-                txtName.getText(),
-                txtAddress.getText(),
-                Double.parseDouble(txtSalary.getText()));
-
-        String sql = "UPDATE customer SET name='"+c.getName()+"', address='"+c.getAddress()+"', salary="+c.getSalary()+" WHERE id='"+c.getId()+"'";
 
         try {
-            Statement stm = DBConnection.getInstance().getConnection().createStatement();
-            int result = stm.executeUpdate(sql);
-            if (result>0){
-                new Alert(Alert.AlertType.INFORMATION,"Customer "+c.getId()+" Updated!").show();
+            boolean isUpdated = customerModel.updateCutomer(
+                    new CustomerDto(txtID.getText(),
+                            txtName.getText(),
+                            txtAddress.getText(),
+                            Double.parseDouble(txtSalary.getText()))
+            );
+
+            if (isUpdated){
+                new Alert(Alert.AlertType.INFORMATION,"Customer Updated!").show();
                 loadCustomerTable();
                 clearfields();
             }
