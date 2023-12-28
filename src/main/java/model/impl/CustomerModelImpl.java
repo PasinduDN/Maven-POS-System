@@ -41,8 +41,12 @@ public class CustomerModelImpl implements CustomerModel {
     }
 
     @Override
-    public boolean deleteCustomer(CustomerDto dto) {
-        return false;
+    public boolean deleteCustomer(String id) throws SQLException, ClassNotFoundException {
+        String sql = "DELETE FROM customer WHERE id=?";
+        PreparedStatement pstm = DBConnection.getInstance().getConnection().prepareStatement(sql);
+        pstm.setString(1,id);
+
+        return pstm.executeUpdate()>0;
     }
 
     @Override
