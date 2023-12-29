@@ -1,19 +1,22 @@
 package controller;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.RecursiveTreeItem;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import dto.CustomerDto;
 import dto.ItemDto;
+import dto.tm.ItemTm;
+import dto.tm.OrderTm;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.CustomerModel;
 import model.ItemModel;
@@ -60,7 +63,7 @@ public class PlaceOrderFormController {
     private TableColumn<?, ?> colQty;
 
     @FXML
-    private TableView<?> tblOrder;
+    private TableView<OrderTm> tblOrder;
 
     @FXML
     private Label tblTota;
@@ -94,8 +97,45 @@ public class PlaceOrderFormController {
         }
     }
 
+    ObservableList<OrderTm> tmlist = FXCollections.observableArrayList();
+
     @FXML
     void cartBtnOnAction(ActionEvent event) {
+        try {
+            double amount = itemModel.getItem(cmbItemCode.getValue().toString()).getUnitPrice()*Integer.parseInt(txtQty.getText());
+            JFXButton btn = new JFXButton("Delete");
+            btn.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+            OrderTm tm = new OrderTm(
+                    cmbItemCode.getValue().toString(),
+                    txtDesc.getText(),
+                    Integer.parseInt(txtQty.getText()),
+                    amount,
+                    btn
+            );
+
+            boolean isExist = false;
+
+            for (OrderTm order:tmlList){
+                if(order.getCode().equals(tm.getCode())){
+                    order.setQty(order.getQty()+tm.getQty());
+                    order.setAmount(order.getAmount()+tm.getAmount());
+                    isExist=true;
+                }
+            }
+
+            if (!isExist){
+                tmlist.add(tm);
+            }
+
+            tblOrder.setItems(tmlist);
+//            TreeItem<OrderTm> treeObject = new RecursiveTreeItem<OrderTm>(tmlList, RecursiveTreeObject::getChildren);
+//            tblOrder.setRoot()
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
 
     }
 
@@ -104,8 +144,15 @@ public class PlaceOrderFormController {
 
     }
 
+    private ObservableList <OrderTm> tmlList = FXCollections.observableArrayList();
     
     public void initialize(){
+        colCode.setCellValueFactory(new PropertyValueFactory<>("code"));
+        colDesc.setCellValueFactory(new PropertyValueFactory<>("desc"));
+        colQty.setCellValueFactory(new PropertyValueFactory<>("qty"));
+        colAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        colOption.setCellValueFactory(new PropertyValueFactory<>("btn"));
+
         loadCuetomerIds();
         loadItemCodes();
 
