@@ -83,6 +83,8 @@ public class PlaceOrderFormController {
     private List<CustomerDto> customers ;
     private List<ItemDto> items ;
 
+    private double total = 0;
+
     private CustomerModel customerModel = new CustomerModelImpl();
     private  ItemModel itemModel = new ItemModelImpl();
 
@@ -113,21 +115,33 @@ public class PlaceOrderFormController {
                     btn
             );
 
+            btn.setOnAction(actionEvent -> {
+                tmlList.remove(tm);
+                total -= tm.getAmount();
+                tblOrder.refresh();
+                tblTota.setText(String.format("%.2f",total));
+            });
+
+
             boolean isExist = false;
+
 
             for (OrderTm order:tmlList){
                 if(order.getCode().equals(tm.getCode())){
                     order.setQty(order.getQty()+tm.getQty());
                     order.setAmount(order.getAmount()+tm.getAmount());
                     isExist=true;
+                    total+=tm.getAmount();
                 }
             }
 
             if (!isExist){
                 tmlist.add(tm);
+                total+=tm.getAmount();
             }
 
             tblOrder.setItems(tmlist);
+            tblTota.setText(String.format("%.2f",total));
 //            TreeItem<OrderTm> treeObject = new RecursiveTreeItem<OrderTm>(tmlList, RecursiveTreeObject::getChildren);
 //            tblOrder.setRoot()
         } catch (SQLException e) {
