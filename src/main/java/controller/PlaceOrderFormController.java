@@ -7,6 +7,7 @@ import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import dto.CustomerDto;
 import dto.ItemDto;
+import dto.OrderDto;
 import dto.tm.ItemTm;
 import dto.tm.OrderTm;
 import javafx.collections.FXCollections;
@@ -32,6 +33,7 @@ import java.util.List;
 
 public class PlaceOrderFormController {
 
+    public Label lblOrderId;
     @FXML
     private Button btnBack;
 
@@ -87,6 +89,7 @@ public class PlaceOrderFormController {
 
     private CustomerModel customerModel = new CustomerModelImpl();
     private  ItemModel itemModel = new ItemModelImpl();
+    private OrderModel orderModel = new OrderModelImpl();
 
     @FXML
     void backBtnOnAction(ActionEvent event) {
@@ -153,9 +156,29 @@ public class PlaceOrderFormController {
 
     }
 
+    public void generateId(){
+        try {
+            OrderDto dto = orderModel.lastOrder();
+            if (dto!=null){
+                String id = dto.getOrderId();
+                int num = Integer.parseInt(id.split("[D]")[1]);
+                num++;
+                lblOrderId.setText(String.format("D%03d",num));
+            }else {
+                lblOrderId.setText("D001");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @FXML
     void placeOrderBtnOnAction(ActionEvent event) {
+        if (!tmlList.isEmpty()){
 
+        }
     }
 
     private ObservableList <OrderTm> tmlList = FXCollections.observableArrayList();
@@ -166,6 +189,8 @@ public class PlaceOrderFormController {
         colQty.setCellValueFactory(new PropertyValueFactory<>("qty"));
         colAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
         colOption.setCellValueFactory(new PropertyValueFactory<>("btn"));
+
+        generateId();
 
         loadCuetomerIds();
         loadItemCodes();

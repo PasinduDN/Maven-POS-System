@@ -77,7 +77,12 @@
             <Font size="15.0" />
          </font>
       </Label>
-      <Label fx:id="tblTota" layoutX="92.0" layoutY="457.0" prefHeight="30.0" prefWidth="40.0" text="0.00">
+      <Label fx:id="tblTota" layoutX="92.0" layoutY="457.0" prefHeight="30.0" prefWidth="124.0">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblOrderId" layoutX="502.0" layoutY="29.0" prefHeight="30.0" prefWidth="124.0">
          <font>
             <Font size="15.0" />
          </font>
