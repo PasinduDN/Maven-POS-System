@@ -7,6 +7,7 @@ import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import dto.CustomerDto;
 import dto.ItemDto;
+import dto.OrderDetailsDto;
 import dto.OrderDto;
 import dto.tm.ItemTm;
 import dto.tm.OrderTm;
@@ -28,6 +29,8 @@ import model.impl.OrderModelImpl;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -176,9 +179,37 @@ public class PlaceOrderFormController {
 
     @FXML
     void placeOrderBtnOnAction(ActionEvent event) {
-        if (!tmlList.isEmpty()){
-
+        List<OrderDetailsDto> list = new ArrayList<>();
+        for (OrderTm tm: tmlList){
+            list.add(new OrderDetailsDto(
+               lblOrderId.getText(),
+                    tm.getCode(),
+                    tm.getQty(),
+                    tm.getAmount()/tm.getQty()
+            ));
         }
+
+            boolean isSaved = false;
+            try {
+                isSaved = orderModel.saveOrder(new OrderDto(
+                        lblOrderId.getText(),
+                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY-MM-dd")),
+                        cmbCustId.getValue().toString(),
+                        list
+                ));
+
+                if (isSaved){
+                    new Alert(Alert.AlertType.INFORMATION,"Order Saved!").show();
+                }else {
+                    new Alert(Alert.AlertType.ERROR,"Somethind Went Wrong!").show();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
+//        }
     }
 
     private ObservableList <OrderTm> tmlList = FXCollections.observableArrayList();
