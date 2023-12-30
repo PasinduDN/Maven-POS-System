@@ -7,8 +7,11 @@ import db.DBConnection;
 import dto.CustomerDto;
 import dto.ItemDto;
 import dto.tm.CustomerTm;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +21,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import dto.tm.ItemTm;
 
+import javax.sql.rowset.Predicate;
 import java.io.IOException;
 import java.sql.*;
 
@@ -61,6 +65,8 @@ public class ItemFormController {
 
     @FXML
     private TextField txtSearch;
+//    import java.util.function.Predicate;
+
 
 
     @FXML
@@ -117,10 +123,37 @@ public class ItemFormController {
 
         loadItemTable();
 
+        txtSearch.textProperty().addListener((observableValue, oldValue, newValue) -> {
+            filterItems(newValue);
+        });
+
         tblItem.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
             setdata(newValue);
         });
 
+//        txtSearch.textProperty().addListener(new ChangeListener<String>() {
+//            @Override
+//            public void changed(ObservableValue<? extends String> observableValue, String s, String newValue) {
+//                tblItem.setPredicate(new Predicate<TreeItem<ItemTm>>() {
+//                    @Override
+//                    public boolean test(TreeItem<ItemTm> treeItem) {
+//                        return treeItem.getValue().getCode().contains(newValue) ||
+//                                treeItem.getValue().getDesc().contains(newValue);
+//                    }
+//                });
+//            }
+//        });
+
+    }
+
+    private void filterItems(String newValue) {
+        ObservableList<ItemTm> originalList = tblItem.getItems();
+        FilteredList<ItemTm> filteredList = new FilteredList<>(originalList);
+
+        filteredList.setPredicate(item ->
+                item.getCode().contains(newValue) || item.getDesc().contains(newValue));
+
+        tblItem.setItems(filteredList);
     }
 
     private void loadItemTable() {
